@@ -21,9 +21,6 @@ RUN groupadd -g 1000 elasticsearch && useradd -u 1000 -g 1000 -G 0 -d /usr/share
 
 WORKDIR /usr/share/elasticsearch
 
-# Replace OpenJDK's built-in CA certificate keystore with the one from the OS
-# vendor. The latter is superior in several ways.
-# REF: https://github.com/elastic/elasticsearch-docker/issues/171
 
 RUN ln -sf /etc/pki/ca-trust/extracted/java/cacerts /usr/share/elasticsearch/jdk/lib/security/cacerts
 
@@ -32,8 +29,6 @@ ENV PATH /usr/share/elasticsearch/bin:$PATH
 COPY --chown=1000:0 bin/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 
-# Openshift overrides USER and uses ones with randomly uid>1024 and gid=0
-# Allow ENTRYPOINT (and ES) to run even with a different user
 RUN chgrp 0 /usr/local/bin/docker-entrypoint.sh && chmod g=u /etc/passwd && chmod 0775 /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 9200 9300
@@ -41,9 +36,3 @@ EXPOSE 9200 9300
 
 
 CMD ["/usr/local/bin/docker-entrypoint.sh"]
-# Dummy overridable parameter parsed by entrypoint
-#CMD ["eswrapper"]
-
-################################################################################
-# End of multi-stage Dockerfile
-################################################################################
