@@ -53,4 +53,4 @@ ENV JAVA_HOME /etc/alternatives/jre
 
 
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint"]
+CMD ["/usr/local/bin/docker-entrypoint"]
